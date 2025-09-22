@@ -25,6 +25,12 @@ sed -i 's/kmod-usb-net-rndis //g' target/linux/mediatek/image/mt7986.mk
 sed -i 's/ luci-app-samba4//g' target/linux/mediatek/image/mt7986.mk
 sed -i '/luci-app-filetransfer/d' include/target.mk
 
+# 添加设备配置（Netcore N60 Pro 512MB ROM）
+cat >> .config <<EOF
+CONFIG_TARGET_DEVICE_mediatek_mt7986_DEVICE_netcore_n60pro-512rom=y
+CONFIG_TARGET_DEVICE_PACKAGES_mediatek_mt7986_DEVICE_netcore_n60pro-512rom=
+EOF
+
 # 添加组播防火墙规则
 cat >> package/network/config/firewall/files/firewall.config <<EOF
 config rule
