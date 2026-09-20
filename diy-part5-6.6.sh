@@ -37,3 +37,27 @@ config rule
         option proto 'udp'
         option target 'ACCEPT'
 EOF
+
+# 去掉 feeds 里会和 PassWall 抢包的旧核心
+rm -rf feeds/packages/net/xray-core
+rm -rf feeds/packages/net/v2ray-geodata
+rm -rf feeds/packages/net/sing-box
+rm -rf feeds/packages/net/chinadns-ng
+rm -rf feeds/packages/net/dns2socks
+rm -rf feeds/packages/net/hysteria
+rm -rf feeds/packages/net/ipt2socks
+rm -rf feeds/packages/net/microsocks
+rm -rf feeds/packages/net/naiveproxy
+rm -rf feeds/packages/net/shadowsocks-rust
+rm -rf feeds/packages/net/shadowsocksr-libev
+rm -rf feeds/packages/net/simple-obfs
+rm -rf feeds/packages/net/tcping
+rm -rf feeds/packages/net/v2ray-plugin
+rm -rf feeds/packages/net/xray-plugin
+rm -rf feeds/packages/net/geoview
+rm -rf feeds/packages/net/shadow-tls
+rm -rf feeds/luci/applications/luci-app-passwall
+
+# 拉官方 PassWall
+git clone --depth 1 https://github.com/Openwrt-Passwall/openwrt-passwall-packages package/passwall-packages
+git clone --depth 1 https://github.com/Openwrt-Passwall/openwrt-passwall package/passwall-luci
