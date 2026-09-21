@@ -39,7 +39,7 @@ config rule
 EOF
 
 # 去掉会和 PassWall 抢包的 feeds 旧核心
-rm -rf feeds/packages/net/xray-core
+# rm -rf feeds/packages/net/xray-core
 rm -rf feeds/packages/net/v2ray-geodata
 rm -rf feeds/packages/net/sing-box
 rm -rf feeds/packages/net/chinadns-ng
@@ -61,3 +61,6 @@ rm -rf feeds/luci/applications/luci-app-passwall
 rm -rf package/passwall-packages package/passwall-luci
 git clone --depth 1 https://github.com/Openwrt-Passwall/openwrt-passwall-packages package/passwall-packages
 git clone --depth 1 https://github.com/Openwrt-Passwall/openwrt-passwall package/passwall-luci
+
+rm -rf package/passwall-packages/xray-core
+rm -rf package/passwall-packages/geoview
