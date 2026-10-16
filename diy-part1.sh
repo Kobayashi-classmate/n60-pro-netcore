@@ -18,8 +18,11 @@
 # sed -i '1i src-git passwall_luci https://github.com/Openwrt-Passwall/openwrt-passwall.git;main' feeds.conf.default
 
 # Add a feed source
-echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
+# echo 'src-git helloworld https://github.com/fw876/helloworld' >>feeds.conf.default
+
+# Add OpenClash
+git clone --depth=1 https://github.com/vernesong/OpenClash.git package/OpenClash
 
 # Add ADGuardHome source
-git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
-chmod -R 755 ./package/luci-app-adguardhome/*
+# git clone https://github.com/rufengsuixing/luci-app-adguardhome package/luci-app-adguardhome
+# chmod -R 755 ./package/luci-app-adguardhome/*
