@@ -1,0 +1,26 @@
+#
+# 入口：LEDE
+# 编译流程见 build.yml；由 check-update.yml 发现上游更新时通过 repository_dispatch 触发
+#
+
+name: LEDE
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [update-lede]
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      repo_url: https://github.com/coolsnowwolf/lede
+      repo_branch: 'master'
+      config_file: LEDE.config
+      diy_p1_sh: diy-LEDE.sh
+      diy_p2_sh: diy-part2.sh
+      firmware_tag: LEDE

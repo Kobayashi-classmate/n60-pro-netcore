@@ -1,0 +1,86 @@
+#
+# 基于 https://github.com/P3TERX/Actions-OpenWrt
+#
+# File: .github/workflows/check-update.yml
+# Description: 检查各上游源码是否有新提交，只触发有更新的固件编译
+#
+# Copyright (c) 2019-2024 P3TERX <https://p3terx.com>
+#
+# This is free software, licensed under the MIT License.
+# See /LICENSE for more information.
+#
+
+name: check-update
+
+on:
+  workflow_dispatch:
+#  schedule:
+#    - cron: 0 */18 * * *
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: lede
+            repo_url: https://github.com/coolsnowwolf/lede
+            repo_branch: master
+            event: update-lede
+          - name: immortalwrt
+            repo_url: https://github.com/immortalwrt/immortalwrt
+            repo_branch: openwrt-25.12
+            event: update-immortalwrt
+          - name: 237-2410
+            repo_url: https://github.com/padavanonly/immortalwrt-mt798x-6.6
+            repo_branch: '2410'
+            event: update-237-2410
+          - name: 237-6.6
+            repo_url: https://github.com/padavanonly/immortalwrt-mt798x-6.6
+            repo_branch: openwrt-24.10-6.6
+            event: update-237-6.6
+
+    steps:
+    - name: Get Commit Hash
+      id: getHash
+      env:
+        REPO_URL: ${{ matrix.repo_url }}
+        REPO_BRANCH: ${{ matrix.repo_branch }}
+      run: |
+        hash=$(git ls-remote "$REPO_URL" "refs/heads/$REPO_BRANCH" | cut -f1)
+        [ -n "$hash" ] || { echo "::error::无法获取 $REPO_URL $REPO_BRANCH 的提交"; exit 1; }
+        echo "commitHash=$hash" >> $GITHUB_OUTPUT
+
+    - name: Compare Commit Hash
+      id: cacheHash
+      uses: actions/cache@v6
+      with:
+        path: .commitHash
+        key: commitHash-${{ matrix.name }}-${{ steps.getHash.outputs.commitHash }}
+
+    - name: Save New Commit Hash
+      if: steps.cacheHash.outputs.cache-hit != 'true'
+      run: echo ${{ steps.getHash.outputs.commitHash }} | tee .commitHash
+
+    - name: Trigger build
+      if: steps.cacheHash.outputs.cache-hit != 'true'
+      uses: peter-evans/repository-dispatch@v4
+      with:
+        event-type: ${{ matrix.event }}
+        client-payload: '{"commit": "${{ steps.getHash.outputs.commitHash }}"}'
+
+  cleanup:
+    needs: check
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+    - name: Delete workflow runs
+      uses: Mattraks/delete-workflow-runs@v2
+      with:
+        retain_days: 0
+        keep_minimum_runs: 2

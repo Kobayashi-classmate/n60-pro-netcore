@@ -1,40 +1,109 @@
-**English** | [中文](https://p3terx.com/archives/build-openwrt-with-github-actions.html)
+# 磊科 Netcore N60 Pro 固件编译仓库
 
-# Actions-OpenWrt
+[![LICENSE](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square&label=LICENSE)](LICENSE)
 
-[![LICENSE](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square&label=LICENSE)](https://github.com/P3TERX/Actions-OpenWrt/blob/master/LICENSE)
-![GitHub Stars](https://img.shields.io/github/stars/P3TERX/Actions-OpenWrt.svg?style=flat-square&label=Stars&logo=github)
-![GitHub Forks](https://img.shields.io/github/forks/P3TERX/Actions-OpenWrt.svg?style=flat-square&label=Forks&logo=github)
+基于 [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt) 模板，专为 **磊科 Netcore N60 Pro（MT7986 / Filogic）** 定制的 GitHub Actions 自动化编译仓库。
 
-A template for building OpenWrt with GitHub Actions
+## 推荐固件优先级
 
-## Usage
+| 优先级 | 固件 | 源码 | 说明 |
+|--------|------|------|------|
+| ⭐⭐⭐ | **237（padavanonly）6.6 内核** | [padavanonly/immortalwrt-mt798x-6.6](https://github.com/padavanonly/immortalwrt-mt798x-6.6) (`openwrt-24.10-6.6`) | **首选**，MTK 闭源无线驱动，无线表现最好 |
+| ⭐⭐ | 237（padavanonly）5.4 内核 | [padavanonly/immortalwrt-mt798x-6.6](https://github.com/padavanonly/immortalwrt-mt798x-6.6) (`2410`) | 备用，部分情况下更稳定 |
+| ⭐ | ImmortalWrt 官方 | [immortalwrt/immortalwrt](https://github.com/immortalwrt/immortalwrt) (`openwrt-25.12`) | 开源驱动，干净稳定，长期维护 |
+| - | LEDE | [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede) (`master`) | 插件丰富，维护性一般 |
 
-- 点击 [Fork] 按钮生成新项目.
-- [LEDE源码](https://github.com/coolsnowwolf/lede)，自定义脚本diy-part2.sh，配置文件LEDE.config.
-- [dailook源码](https://github.com/dailook/immortalwrt-mt798x)，自定义脚本diy-part3.sh，配置文件dailook-hanwckf.config.该源码适配了硬改后的512M闪存，如果需要编译512M的ROM，需要在dailook-hanwckf.config文件里面添加如下内容：
- ```bash
-CONFIG_TARGET_DEVICE_mediatek_mt7986_DEVICE_netcore_n60pro-512rom=y
-CONFIG_TARGET_DEVICE_PACKAGES_mediatek_mt7986_DEVICE_netcore_n60pro-512rom=""
-```
-- [Immortalwrt源码](https://github.com/immortalwrt/immortalwrt)，自定义脚本diy-part4.sh，配置文件immortalwrt.config.
-- [237源码](https://github.com/padavanonly/immortalwrt-mt798x-24.10)，6.6内核自定义脚本diy-part5-6.6.sh，配置文件padavanonly-immortalwrt-mt798x-6.6.config，5.4内核版本自定义脚本diy-part5-2410.sh，配置文件padavanonly-immortalwrt-mt798x-2410.config.
-- diy-part1.sh是共用脚本，加入了ADGuardHome源码，所有默认配置文件只集成了定时重启、终端ttyd、组播代理omcproxy、组播转换msd_lite和ADGuardHome的luci，需要自定义的请自行修改对应的自定义脚本和配置文件.
-- ADGuardHome正常使用需要在luci里面手动下载[Linux_arm64核心文件](https://github.com/AdguardTeam/AdGuardHome/releases/),或者PC下载后解压将AdGuardHome上传至/usr/bin/AdGuardHome/，设置权限0755.
-- 在Actions页面运行对应的源码固件编译文件，点击右侧的 Run workflow 按钮开始编译，正常的话大概1-2h左右能看到编译结果，编译完成后下载相应的固件即可.
+> 已移除 dailook-hanwckf（基于 OpenWrt 21.02，已过时）。
 
-## Tips
+## 默认集成插件
 
-- It may take a long time to create a `.config` file and build the OpenWrt firmware. Thus, before create repository to build your own firmware, you may check out if others have already built it which meet your needs by simply [search `Actions-Openwrt` in GitHub](https://github.com/search?q=Actions-openwrt).
-- Add some meta info of your built firmware (such as firmware architecture and installed packages) to your repository introduction, this will save others' time.
+所有固件默认只集成以下内容，保持精简：
 
-## Credits
+- 定时重启
+- ttyd 终端
+- omcproxy（组播代理）
+- msd_lite（组播转换）
+- AdGuardHome（仅 LuCI，核心需手动下载，见下文）
 
-- [Microsoft Azure](https://azure.microsoft.com)
-- [GitHub Actions](https://github.com/features/actions)
-- [OpenWrt](https://github.com/openwrt/openwrt)
+此外，各源码会保留其平台自带的基础功能（如 UPnP，以及 237 源码的 MTK 无线配置、Turbo ACC 硬件加速、eQoS 等）。
+
+**未预装** OpenClash、PassWall 等科学上网插件，需要的话请自行在对应 `.config` 中勾选，并在前置脚本中添加相应 feeds。
+
+## 使用方法
+
+1. Fork 本仓库
+2. 进入 **Actions** 页面
+3. 在左侧选择对应固件的 workflow：`237 mt798x 6.6`、`237 mt798x 2410 (5.4)`、`ImmortalWrt` 或 `LEDE`
+4. 点击右侧 **Run workflow** 开始编译
+5. 编译完成后在 **Releases** 或 Artifacts 中下载固件
+
+编译时间大约 1–2 小时。
+
+### 自动跟随上游更新
+
+运行 **check-update** workflow 会检查 4 个上游源码的最新提交，**只触发有更新的固件**编译。
+如需定时检查，取消 `.github/workflows/check-update.yml` 中 `schedule` 的注释即可。
+
+### 产物说明
+
+- **Releases**：标签格式为 `日期-固件标识`，说明中附带源码仓库、提交链接和编译时间。每个固件独立保留最近 3 个 Release（可在入口文件中通过 `keep_releases` 调整）。
+- **Artifacts**：
+  - `OpenWrt_firmware_*`：固件文件
+  - `config_*`：`make defconfig` 后的完整配置 `full.config` 和精简配置 `seed.config`，便于核对和维护配置文件
+
+## 仓库结构
+
+### 配置文件与脚本对应关系
+
+| 固件 | 配置文件 | 前置脚本 | 后置脚本 | Workflow 入口 |
+|------|----------|----------|----------|---------------|
+| 237 6.6 | `padavanonly-immortalwrt-mt798x-6.6.config` | `diy-part1.sh` | `diy-part5-6.6.sh` | `build-237-6.6.yml` |
+| 237 5.4 | `padavanonly-immortalwrt-mt798x-2410.config` | `diy-part1.sh` | `diy-part5-2410.sh` | `build-237-2410.yml` |
+| ImmortalWrt | `immortalwrt.config` | `diy-part1.sh` | `diy-part4.sh` | `build-immortalwrt.yml` |
+| LEDE | `LEDE.config` | `diy-LEDE.sh` | `diy-part2.sh` | `build-lede.yml` |
+
+- **前置脚本**在 feeds 更新前执行：`diy-part1.sh` 为共用脚本（添加 feeds 和 AdGuardHome 源码），LEDE 使用单独的 `diy-LEDE.sh`
+- **后置脚本**在 feeds 安装后执行：移除不需要的默认软件包、添加组播（IPTV）防火墙规则等
+
+### Workflow
+
+| 文件 | 说明 |
+|------|------|
+| `.github/workflows/build.yml` | 公共编译流程（可复用 workflow），不直接运行 |
+| `.github/workflows/build-*.yml` | 各固件入口，指定源码、分支、配置文件和脚本 |
+| `.github/workflows/check-update.yml` | 上游更新检查，按固件分别触发编译 |
+
+## AdGuardHome 使用说明
+
+固件只包含 LuCI 界面，核心文件需手动安装（二选一）：
+
+1. 在 LuCI 的 AdGuardHome 页面中在线下载 Linux_arm64 核心
+2. 在 PC 上从 [AdGuardHome Releases](https://github.com/AdguardTeam/AdGuardHome/releases/) 下载 `linux_arm64` 版本，解压后将 `AdGuardHome` 上传至 `/usr/bin/AdGuardHome/`，权限设为 `0755`
+
+## 自定义
+
+如需添加插件或修改默认设置：
+
+1. 修改对应的 `.config` 文件（建议在本地 `make menuconfig` 后用 `./scripts/diffconfig.sh` 导出差异）
+2. 或在对应的前置 / 后置脚本中添加自定义命令（如修改默认 IP、主题、主机名，脚本中已附注释示例）
+3. 重新运行对应的 workflow
+
+如需新增一个固件：复制一个 `build-*.yml` 并修改其中参数，再在 `check-update.yml` 的 matrix 中添加对应条目。
+
+## 注意事项
+
+- 目标设备为 **磊科 N60 Pro（MT7986）**，请勿刷入其他设备
+- 从原厂或其他固件刷入时，注意分区布局和引导（U-Boot）是否匹配，不同源码之间切换可能需要先刷对应的 U-Boot
+- 建议优先使用 **237 6.6** 版本
+
+## 致谢
+
+- [P3TERX/Actions-OpenWrt](https://github.com/P3TERX/Actions-OpenWrt)
+- [padavanonly/immortalwrt-mt798x-6.6](https://github.com/padavanonly/immortalwrt-mt798x-6.6)
+- [immortalwrt/immortalwrt](https://github.com/immortalwrt/immortalwrt)
 - [coolsnowwolf/lede](https://github.com/coolsnowwolf/lede)
-- [Mikubill/transfer](https://github.com/Mikubill/transfer)
+- [OpenWrt](https://github.com/openwrt/openwrt)
+- [GitHub Actions](https://github.com/features/actions)
 - [softprops/action-gh-release](https://github.com/softprops/action-gh-release)
 - [Mattraks/delete-workflow-runs](https://github.com/Mattraks/delete-workflow-runs)
 - [dev-drprasad/delete-older-releases](https://github.com/dev-drprasad/delete-older-releases)
@@ -42,4 +111,4 @@ CONFIG_TARGET_DEVICE_PACKAGES_mediatek_mt7986_DEVICE_netcore_n60pro-512rom=""
 
 ## License
 
-[MIT](https://github.com/P3TERX/Actions-OpenWrt/blob/main/LICENSE) © [**P3TERX**](https://p3terx.com)
+[MIT](LICENSE) © [**P3TERX**](https://p3terx.com)

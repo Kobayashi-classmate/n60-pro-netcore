@@ -11,7 +11,7 @@
 #
 
 # Modify default IP
-sed -i 's/192.168.1.1/192.168.66.1/g' package/base-files/files/bin/config_generate
+#sed -i 's/192.168.1.1/192.168.50.5/g' package/base-files/files/bin/config_generate
 
 # Modify default theme
 #sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
@@ -37,30 +37,3 @@ config rule
         option proto 'udp'
         option target 'ACCEPT'
 EOF
-
-# 去掉会和 PassWall 抢包的 feeds 旧核心
-rm -rf feeds/packages/net/xray-core
-rm -rf feeds/packages/net/v2ray-geodata
-rm -rf feeds/packages/net/sing-box
-rm -rf feeds/packages/net/chinadns-ng
-rm -rf feeds/packages/net/dns2socks
-rm -rf feeds/packages/net/hysteria
-rm -rf feeds/packages/net/ipt2socks
-rm -rf feeds/packages/net/microsocks
-rm -rf feeds/packages/net/naiveproxy
-rm -rf feeds/packages/net/shadowsocks-rust
-rm -rf feeds/packages/net/shadowsocksr-libev
-rm -rf feeds/packages/net/simple-obfs
-rm -rf feeds/packages/net/tcping
-rm -rf feeds/packages/net/v2ray-plugin
-rm -rf feeds/packages/net/xray-plugin
-rm -rf feeds/packages/net/geoview
-rm -rf feeds/packages/net/shadow-tls
-rm -rf feeds/luci/applications/luci-app-passwall
-
-rm -rf package/passwall-packages package/passwall-luci
-git clone --depth 1 https://github.com/Openwrt-Passwall/openwrt-passwall-packages package/passwall-packages
-git clone --depth 1 https://github.com/Openwrt-Passwall/openwrt-passwall package/passwall-luci
-
-# rm -rf package/passwall-packages/xray-core
-# rm -rf package/passwall-packages/geoview

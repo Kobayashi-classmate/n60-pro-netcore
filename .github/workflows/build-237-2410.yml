@@ -1,0 +1,26 @@
+#
+# 入口：237 mt798x 2410 (5.4)
+# 编译流程见 build.yml；由 check-update.yml 发现上游更新时通过 repository_dispatch 触发
+#
+
+name: 237 mt798x 2410 (5.4)
+
+on:
+  workflow_dispatch:
+  repository_dispatch:
+    types: [update-237-2410]
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      repo_url: https://github.com/padavanonly/immortalwrt-mt798x-6.6
+      repo_branch: '2410'
+      config_file: padavanonly-immortalwrt-mt798x-2410.config
+      diy_p1_sh: diy-part1.sh
+      diy_p2_sh: diy-part5-2410.sh
+      firmware_tag: padavanonly-237-mt798x-2410
