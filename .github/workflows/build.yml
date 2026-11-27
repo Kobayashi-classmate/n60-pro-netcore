@@ -195,9 +195,22 @@ jobs:
     - name: Organize files
       id: organize
       if: steps.compile.outputs.status == 'success' && inputs.upload_firmware
+      env:
+        FIRMWARE_TAG: ${{ inputs.firmware_tag }}
       run: |
+        report="$GITHUB_WORKSPACE/customize-report.md"
+        config="$GITHUB_WORKSPACE/openwrt/.config"
         cd openwrt/bin/targets/*/*
         rm -rf packages
+        # 软件包清单单独打包成文件，随固件一起上传，不写进 Release 说明
+        {
+          echo "# ${FIRMWARE_TAG} 软件包清单"
+          echo ""
+          [ -f "$report" ] && cat "$report" && echo ""
+          echo "### 固件中全部软件包（含依赖）"
+          echo ""
+          grep -oE '^CONFIG_PACKAGE_[^=]+=y' "$config" | sed -E 's/^CONFIG_PACKAGE_(.*)=y$/- \1/' | sort
+        } > "${FIRMWARE_TAG}-packages.md"
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "status=success" >> $GITHUB_OUTPUT
 
@@ -222,8 +235,7 @@ jobs:
           echo "- 提交：${REPO_URL}/commit/${SOURCE_COMMIT}"
           echo "- 编译时间：$(date +"%Y-%m-%d %H:%M %Z")"
           if [ -f customize-report.md ]; then
-            echo ""
-            cat customize-report.md
+            echo "- 软件包：$(sed -n 's/^已安装/已安装/p' customize-report.md | head -1)，完整清单见附件 \`${FIRMWARE_TAG}-packages.md\`"
           fi
         } > release.txt
         echo "status=success" >> $GITHUB_OUTPUT

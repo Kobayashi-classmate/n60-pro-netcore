@@ -21,3 +21,79 @@ ebtables-legacy-utils        # 网桥防火墙工具
 ipset                        # IP 集合
 iptables-mod-extra
 iptables-mod-tproxy
+
+# ======================================================================
+# 可选软件（已按 237 6.6 源码核对包名）
+# 未注释的会安装；需要时删掉行首 "#" 即可启用
+# 注意：N60 Pro 为 128MB 闪存，大型插件（Docker、下载工具、网盘）同时安装可能空间不足
+# ======================================================================
+
+# ---- 代理客户端（建议只选一个）及搭配的 DNS 工具 ----
+luci-app-openclash               # OpenClash（mihomo 前端；核心需在 LuCI 中下载，同 AdGuardHome）
+#luci-app-passwall               # PassWall
+#luci-app-homeproxy              # HomeProxy（sing-box 前端，相对轻量）
+#luci-app-ssr-plus               # SSR Plus（需在 feeds.txt 启用 helloworld）
+#luci-app-passwall2              # PassWall2（需在 feeds.txt 启用 passwall2）
+#luci-app-nikki                  # Nikki（mihomo 前端；需在 feeds.txt 启用 nikki）
+luci-app-smartdns                # SmartDNS（搭配 OpenClash：作为上游 DNS，国内外分流、测速选最快 IP）
+#luci-app-mosdns                 # MosDNS（需在 feeds.txt 启用 mosdns）
+# 不可用：luci-app-dae（依赖内核 BTF/eBPF，237 基础配置未开启）
+
+# ---- 代理核心 / 工具（选了上面的插件会按依赖自动安装，一般无需单独启用）----
+#chinadns-ng                     # 国内 DNS 分流
+#dns2socks                       # DNS 转 SOCKS
+#dns2tcp                         # DNS 转 TCP
+#microsocks                      # 轻量 SOCKS 代理
+#naiveproxy                      # NaiveProxy
+#shadowsocks-libev-ss-local      # Shadowsocks（libev 版，按组件拆分：ss-local / ss-redir / ss-server）
+#shadowsocks-libev-ss-redir
+#shadowsocks-rust-sslocal        # Shadowsocks（Rust 版）
+#shadowsocksr-libev-ssr-local    # ShadowsocksR（需在 feeds.txt 启用 helloworld）
+#simple-obfs-client              # simple-obfs 混淆插件
+#v2ray-core                      # V2Ray 核心
+#v2ray-plugin                    # V2Ray 插件
+#xray-core                       # Xray 核心
+#sing-box                        # sing-box 核心
+#tuic-client                     # TUIC 客户端
+#hysteria                        # Hysteria 客户端
+#brook                           # Brook
+#trojan-plus                     # Trojan-Plus
+tcping                           # TCP Ping（测试代理节点连通性和延迟）
+#geoview                         # Geo 数据查看
+
+# ---- 其他增强插件（与代理无关，按需启用）----
+#luci-app-ddns                    # 动态域名解析
+#luci-app-wol                     # 网络唤醒
+#luci-app-nlbwmon                 # 流量统计（开启 Turbo ACC 硬件加速时统计不完整）
+#luci-app-sqm                     # SQM 智能队列（与 Turbo ACC 硬件加速同时开启时不生效）
+#luci-app-nft-qos                 # nftables 版 QoS
+#luci-app-dockerman               # Docker 管理（体积大，需外接存储）
+#luci-app-openlist                # OpenList 网盘（原 AList，已改名）
+#luci-app-qbittorrent             # qBittorrent 下载
+#luci-app-transmission            # Transmission 下载
+#luci-app-aria2                   # Aria2 下载
+#luci-app-samba4                  # Samba 文件共享
+#luci-app-hd-idle                 # 硬盘休眠
+#luci-app-diskman                 # 磁盘管理
+#luci-app-zerotier                # ZeroTier 组网
+#luci-app-frpc                    # FRP 客户端
+#luci-app-frps                    # FRP 服务端
+#luci-app-nps                     # NPS 内网穿透
+#luci-app-softethervpn            # SoftEther VPN
+#luci-app-openvpn                 # OpenVPN
+#luci-proto-wireguard             # WireGuard（24.10 起没有 luci-app-wireguard）
+#luci-app-argon-config            # Argon 主题配置
+#luci-theme-material              # Material 主题
+#luci-app-attendedsysupgrade     # 在线升级（依赖官方升级服务器，对 237 源码无用）
+#luci-app-tailscale              # Tailscale（需在 feeds.txt 启用 tailscale；核心 tailscale 源码已有）
+# 不可用：luci-app-filetransfer（LEDE 专有）
+
+# ---- 系统与网络工具 ----
+#iperf3                          # 网络测速
+#curl                            # curl
+#iftop                           # 实时流量监控
+#bind-dig                        # dig 域名查询
+#mtr-json                        # 路由追踪
+#speedtest-cli                   # 命令行测速
+# 不可用：nethogs（源码中没有）
+# 已安装（common.txt / 上方）：htop nano wget-ssl ca-certificates tcpdump kmod-tun ipset iptables-mod-*
