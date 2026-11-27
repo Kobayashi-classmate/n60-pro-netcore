@@ -1,0 +1,7 @@
+# 额外的软件源（feeds），所有固件共用，在 feeds 更新前追加到 feeds.conf.default
+# 格式与 feeds.conf 相同；需要第三方插件时取消对应行的注释，并在软件包清单中加入插件名
+# 注意：第三方 feeds 可能与部分源码不兼容，建议先单独编译验证
+
+#src-git helloworld https://github.com/fw876/helloworld           # luci-app-ssr-plus
+#src-git passwall_packages https://github.com/xiaorouji/openwrt-passwall-packages;main
+#src-git passwall https://github.com/xiaorouji/openwrt-passwall;main  # luci-app-passwall

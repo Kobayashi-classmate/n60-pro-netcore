@@ -1,0 +1,43 @@
+# 所有固件都安装的软件包
+# 规则：一行一个包名；"#" 后为注释；包名前加 "-" 表示移除
+# 优先级：各固件清单（如 lede.txt）高于本文件，可在固件清单中用 "-包名" 去掉这里的包
+# luci-app-* 会自动附带中文语言包（luci-i18n-*-zh-cn），无需单独填写
+# 某源码中不存在的包会被跳过，并在编译摘要中提示，不会导致编译失败
+
+# ---- LuCI 插件 ----
+luci-app-adguardhome     # AdGuardHome（核心需手动下载，见 README）
+luci-app-autoreboot      # 定时重启
+luci-app-ttyd            # 网页终端
+luci-app-omcproxy        # 组播代理
+luci-app-msd_lite        # 组播转换
+luci-app-upnp            # UPnP
+
+# ---- 常用工具 ----
+blockd                       # 磁盘自动挂载
+ip-bridge                    # 网桥工具
+nano                         # 文本编辑器
+openssh-keygen               # SSH 密钥生成
+openssh-sftp-server          # SFTP 文件传输
+openssl-util                 # openssl 命令行
+resolveip                    # 域名解析工具
+tc-tiny                      # 流量控制工具
+tcpdump                      # 抓包工具
+zram-swap                    # 内存压缩交换
+
+# ---- 内核模块 ----
+kmod-ata-core                # ATA 支持
+kmod-ifb                     # 入站流量整形
+
+# ---- USB 存储与文件系统 ----
+kmod-fs-autofs4              # 自动挂载
+
+# ---- iptables / ebtables 扩展（旧版插件兼容，不需要可整段删除） ----
+ip6tables-extra
+iptables-mod-conntrack-extra
+iptables-mod-filter
+iptables-mod-hashlimit
+iptables-mod-ipopt
+iptables-mod-iprange
+iptables-mod-nat-extra
+iptables-mod-tee
+iptables-mod-u32

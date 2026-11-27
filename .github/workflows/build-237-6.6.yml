@@ -24,3 +24,4 @@ jobs:
       diy_p1_sh: diy-part1.sh
       diy_p2_sh: diy-part5-6.6.sh
       firmware_tag: padavanonly-237-mt798x-6.6
+      profile: 237-6.6

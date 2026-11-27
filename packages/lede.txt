@@ -1,0 +1,26 @@
+# LEDE 专属软件包，规则同 common.txt
+# 注意：LEDE 的 N60 Pro 使用开源 mt76 无线驱动，没有 mtwifi-cfg / turboacc-mtk / eqos-mtk
+
+# ---- 常用工具 ----
+wget-ssl                     # wget（支持 HTTPS）
+
+# ---- USB 存储与文件系统 ----
+kmod-fs-exfat
+kmod-fs-ext4
+kmod-fs-f2fs
+kmod-fs-ntfs3                # NTFS 读写（新驱动；旧版 kmod-fs-ntfs 在 6.9+ 内核已移除，勿用）
+kmod-fs-vfat
+kmod-nls-cp437
+kmod-nls-iso8859-1
+kmod-nls-utf8
+kmod-usb-ohci
+kmod-usb-storage
+kmod-usb-storage-extras
+kmod-usb-uhci
+
+# ---- iptables / ebtables 扩展（旧版插件兼容，不需要可整段删除） ----
+ebtables                     # 网桥防火墙
+iptables-mod-iface
+iptables-mod-ipmark
+iptables-mod-ipv4options
+iptables-mod-proto

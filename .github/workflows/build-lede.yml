@@ -24,3 +24,4 @@ jobs:
       diy_p1_sh: diy-LEDE.sh
       diy_p2_sh: diy-part2.sh
       firmware_tag: LEDE
+      profile: lede

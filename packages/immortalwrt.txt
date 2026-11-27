@@ -1,0 +1,22 @@
+# ImmortalWrt 官方 专属软件包，规则同 common.txt
+# 注意：官方源码使用开源 mt76 无线驱动，没有 mtwifi-cfg / turboacc-mtk / eqos-mtk
+
+# ---- 常用工具 ----
+ca-certificates              # CA 根证书
+ethtool                      # 网卡工具
+htop                         # 进程查看
+wget-ssl                     # wget（支持 HTTPS）
+
+# ---- 内核模块 ----
+kmod-tcp-bbr                 # BBR 拥塞控制
+kmod-tun                     # TUN 虚拟网卡
+
+# ---- USB 存储与文件系统 ----
+kmod-fs-f2fs
+kmod-usb-ohci
+kmod-usb-uhci
+
+# ---- iptables / ebtables 扩展（旧版插件兼容，不需要可整段删除） ----
+ipset                        # IP 集合
+iptables-mod-extra
+iptables-mod-tproxy

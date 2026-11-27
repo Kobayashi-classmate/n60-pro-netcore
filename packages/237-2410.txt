@@ -1,0 +1,40 @@
+# 237（padavanonly）5.4 内核 专属软件包，规则同 common.txt
+
+# ---- LuCI 插件 ----
+luci-app-mtwifi-cfg      # MTK 闭源无线配置
+luci-app-turboacc-mtk    # Turbo ACC 硬件加速
+luci-app-eqos-mtk        # eQoS 限速
+-luci-app-upnp           # 此源码使用下面的 MTK 适配版 UPnP
+luci-app-upnp-mtk-adjust
+
+# ---- 常用工具 ----
+ca-certificates              # CA 根证书
+ethtool                      # 网卡工具
+htop                         # 进程查看
+
+# ---- 内核模块 ----
+kmod-tcp-bbr                 # BBR 拥塞控制
+kmod-tun                     # TUN 虚拟网卡
+
+# ---- iptables / ebtables 扩展（旧版插件兼容，不需要可整段删除） ----
+ebtables-legacy              # 网桥防火墙
+ebtables-legacy-utils        # 网桥防火墙工具
+ipset                        # IP 集合
+iptables-mod-extra
+iptables-mod-tproxy
+
+# ---- 移除源码默认自带的软件包 ----
+-iptables-nft
+-kmod-fs-exportfs
+-kmod-fs-ksmbd
+-kmod-fs-nfs-common
+-kmod-fs-nfs-common-rpcsec
+-kmod-fs-nfsd
+-kmod-usb-printer
+-ksmbd-server
+-p910nd
+-wrtbwmon
+-wsdd2
+-luci-app-ksmbd
+-luci-app-usb-printer
+-luci-app-wrtbwmon

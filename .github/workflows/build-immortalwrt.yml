@@ -24,3 +24,4 @@ jobs:
       diy_p1_sh: diy-part1.sh
       diy_p2_sh: diy-part4.sh
       firmware_tag: ImmortalWrt
+      profile: immortalwrt

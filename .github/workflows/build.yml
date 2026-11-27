@@ -39,6 +39,10 @@ on:
         description: 固件标识，用于 Release 标签和清理旧 Release
         required: true
         type: string
+      profile:
+        description: 软件包清单名称，对应 packages/<profile>.txt
+        required: true
+        type: string
       feeds_conf:
         description: 自定义 feeds.conf.default（仓库中存在时才生效）
         required: false
@@ -120,6 +124,7 @@ jobs:
         chmod +x "$DIY_P1_SH"
         cd openwrt
         "$GITHUB_WORKSPACE/$DIY_P1_SH"
+        "$GITHUB_WORKSPACE/scripts/customize.sh" feeds
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
@@ -131,17 +136,22 @@ jobs:
       env:
         CONFIG_FILE: ${{ inputs.config_file }}
         DIY_P2_SH: ${{ inputs.diy_p2_sh }}
+        PROFILE: ${{ inputs.profile }}
       run: |
         [ -e files ] && mv files openwrt/files
         [ -e "$CONFIG_FILE" ] && mv "$CONFIG_FILE" openwrt/.config
         chmod +x "$DIY_P2_SH"
         cd openwrt
         "$GITHUB_WORKSPACE/$DIY_P2_SH"
+        "$GITHUB_WORKSPACE/scripts/customize.sh" apply "$PROFILE"
 
     - name: Generate configuration
+      env:
+        PROFILE: ${{ inputs.profile }}
       run: |
         cd openwrt
         make defconfig
+        "$GITHUB_WORKSPACE/scripts/customize.sh" check "$PROFILE"
         mkdir -p $GITHUB_WORKSPACE/config-export
         cp .config $GITHUB_WORKSPACE/config-export/full.config
         ./scripts/diffconfig.sh > $GITHUB_WORKSPACE/config-export/seed.config
@@ -211,6 +221,10 @@ jobs:
           echo "- 源码：${REPO_URL} (${REPO_BRANCH})"
           echo "- 提交：${REPO_URL}/commit/${SOURCE_COMMIT}"
           echo "- 编译时间：$(date +"%Y-%m-%d %H:%M %Z")"
+          if [ -f customize-report.md ]; then
+            echo ""
+            cat customize-report.md
+          fi
         } > release.txt
         echo "status=success" >> $GITHUB_OUTPUT
 

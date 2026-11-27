@@ -1,0 +1,23 @@
+# 237（padavanonly）6.6 内核 专属软件包，规则同 common.txt
+
+# ---- LuCI 插件 ----
+luci-app-mtwifi-cfg      # MTK 闭源无线配置
+luci-app-turboacc-mtk    # Turbo ACC 硬件加速
+luci-app-eqos-mtk        # eQoS 限速
+
+# ---- 常用工具 ----
+ca-certificates              # CA 根证书
+htop                         # 进程查看
+wget-ssl                     # wget（支持 HTTPS）
+
+# ---- 内核模块 ----
+kmod-bonding                 # 链路聚合
+kmod-tcp-bbr                 # BBR 拥塞控制
+kmod-tun                     # TUN 虚拟网卡
+
+# ---- iptables / ebtables 扩展（旧版插件兼容，不需要可整段删除） ----
+ebtables-legacy              # 网桥防火墙
+ebtables-legacy-utils        # 网桥防火墙工具
+ipset                        # IP 集合
+iptables-mod-extra
+iptables-mod-tproxy
