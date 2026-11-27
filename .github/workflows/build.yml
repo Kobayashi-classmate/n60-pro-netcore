@@ -124,7 +124,7 @@ jobs:
         chmod +x "$DIY_P1_SH"
         cd openwrt
         "$GITHUB_WORKSPACE/$DIY_P1_SH"
-        "$GITHUB_WORKSPACE/scripts/customize.sh" feeds
+        bash "$GITHUB_WORKSPACE/scripts/customize.sh" feeds
 
     - name: Update feeds
       run: cd openwrt && ./scripts/feeds update -a
@@ -143,7 +143,7 @@ jobs:
         chmod +x "$DIY_P2_SH"
         cd openwrt
         "$GITHUB_WORKSPACE/$DIY_P2_SH"
-        "$GITHUB_WORKSPACE/scripts/customize.sh" apply "$PROFILE"
+        bash "$GITHUB_WORKSPACE/scripts/customize.sh" apply "$PROFILE"
 
     - name: Generate configuration
       env:
@@ -151,7 +151,7 @@ jobs:
       run: |
         cd openwrt
         make defconfig
-        "$GITHUB_WORKSPACE/scripts/customize.sh" check "$PROFILE"
+        bash "$GITHUB_WORKSPACE/scripts/customize.sh" check "$PROFILE"
         mkdir -p $GITHUB_WORKSPACE/config-export
         cp .config $GITHUB_WORKSPACE/config-export/full.config
         ./scripts/diffconfig.sh > $GITHUB_WORKSPACE/config-export/seed.config
